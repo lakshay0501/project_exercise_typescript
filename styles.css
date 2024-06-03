@@ -1,0 +1,57 @@
+.inputContainer {
+    display: flex;
+    margin-bottom: 25px;
+}
+
+.inputContainer div {
+    margin-left: 30%;
+}
+
+#inputbox {
+    width: 25%;
+    margin-left: 20px;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    /* justify-content: center; */
+    /* padding-left: 10%;
+    padding-right: 10%; */
+    font-family: sans-serif;
+    margin-left: 16%;
+    margin-right: 10%;
+}
+
+.card :hover {
+    cursor: pointer;
+}
+
+.card h3 {
+    color: gray;
+    text-align: center;
+}
+
+.card img {
+    height: 100px;
+    width: 200px;
+}
+
+.card p {
+    margin-bottom: 0;
+    text-align: left;
+    font-family: sans-serif;
+    color: gray;
+    text-align: center;
+}
+
+.card {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px gray;
+    padding: 20px;
+    width: 200px;
+    font-family: sans-serif
+        /* padding-left: 100px; */
+}
