@@ -1,16 +1,32 @@
 interface Item {
-    name: string,
-    description: string,
-    imagePath: string
+    name: string;
+    description: string;
+    imagePath: string;
 }
 
 interface Filter {
-    filter(searchText: string): Promise<Item[]>
+    filter(searchText: string): Promise<Item[]>;
 }
 
-const filter = fetchData();
-onSearchClick();
+class DataFetch implements Filter {
+    private data: Item[] | null = null;
 
+    async filter(searchText: string): Promise<Item[]> {
+        if (!this.data) {
+            await this.fetchData();
+        }
+        return (this.data ?? []).filter(item => item.name?.toLowerCase().includes(searchText ?? ""));
+    }
+
+    async fetchData() {
+        const response = await fetch("https://pbivizedit.com/api/visuals");
+        const json = await response.json();
+        this.data = json.items;
+    }
+}
+
+const filter: Filter = new DataFetch();
+onSearchClick();
 
 function createCard(item: Item): HTMLDivElement {
     const card = document.createElement("div");
@@ -56,20 +72,22 @@ function clearDOM(container: HTMLElement) {
 
 function getInputValue(itemId: string): string {
     const inputElement = document.getElementById(itemId) as HTMLInputElement;
-    return inputElement.value
+    return inputElement.value;
 }
 
 function fetchData(): Filter {
-    let data: Item[] | null;
+    // let data: Item[] | null;
 
-    return {
-        async filter(searchText) {
-            if (!data) {
-                const response = await fetch("https://pbivizedit.com/api/visuals");
-                const json = await response.json();
-                data = json.items;
-            }
-            return (data ?? []).filter(item => item.name?.toLowerCase().includes(searchText ?? ""));
-        }
-    }
+    // return {
+    //     async filter(searchText) {
+    //         if (!data) {
+    //             const response = await fetch("https://pbivizedit.com/api/visuals");
+    //             const json = await response.json();
+    //             data = json.items;
+    //         }
+    //         return (data ?? []).filter(item => item.name?.toLowerCase().includes(searchText ?? ""));
+    //     }
+    // }
+
+    return new DataFetch();
 }

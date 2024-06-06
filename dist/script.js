@@ -8,7 +8,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const filter = fetchData();
+class DataFetch {
+    constructor() {
+        this.data = null;
+    }
+    filter(searchText) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            if (!this.data) {
+                yield this.fetchData();
+            }
+            return ((_a = this.data) !== null && _a !== void 0 ? _a : []).filter(item => { var _a; return (_a = item.name) === null || _a === void 0 ? void 0 : _a.toLowerCase().includes(searchText !== null && searchText !== void 0 ? searchText : ""); });
+        });
+    }
+    fetchData() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield fetch("https://pbivizedit.com/api/visuals");
+            const json = yield response.json();
+            this.data = json.items;
+        });
+    }
+}
+const filter = new DataFetch();
 onSearchClick();
 function createCard(item) {
     const card = document.createElement("div");
@@ -51,17 +72,16 @@ function getInputValue(itemId) {
     return inputElement.value;
 }
 function fetchData() {
-    let data;
-    return {
-        filter(searchText) {
-            return __awaiter(this, void 0, void 0, function* () {
-                if (!data) {
-                    const response = yield fetch("https://pbivizedit.com/api/visuals");
-                    const json = yield response.json();
-                    data = json.items;
-                }
-                return (data !== null && data !== void 0 ? data : []).filter(item => { var _a; return (_a = item.name) === null || _a === void 0 ? void 0 : _a.toLowerCase().includes(searchText !== null && searchText !== void 0 ? searchText : ""); });
-            });
-        }
-    };
+    // let data: Item[] | null;
+    // return {
+    //     async filter(searchText) {
+    //         if (!data) {
+    //             const response = await fetch("https://pbivizedit.com/api/visuals");
+    //             const json = await response.json();
+    //             data = json.items;
+    //         }
+    //         return (data ?? []).filter(item => item.name?.toLowerCase().includes(searchText ?? ""));
+    //     }
+    // }
+    return new DataFetch();
 }
